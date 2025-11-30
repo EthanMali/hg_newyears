@@ -3,6 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .registration-card {
@@ -18,26 +19,29 @@
 }
 
 .language-switcher {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
-  background: #000;
+  background: transparent;
   color: #fff;
-  border: 2px solid #000;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 700;
+  border: 1px solid #fff;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  min-width: 50px;
+  letter-spacing: 0.5px;
+  z-index: 1000;
   -webkit-tap-highlight-color: transparent;
+  opacity: 0.7;
 }
 
 .language-switcher:hover {
   background: #fff;
   color: #000;
+  opacity: 1;
+  border-color: #fff;
 }
 
 .language-switcher:active {
@@ -48,9 +52,9 @@
   .language-switcher {
     top: 12px;
     right: 12px;
-    padding: 6px 12px;
-    font-size: 12px;
-    min-width: 44px;
+    padding: 5px 10px;
+    font-size: 11px;
+    min-width: 40px;
   }
 }
 

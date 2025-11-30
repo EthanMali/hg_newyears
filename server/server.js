@@ -322,7 +322,7 @@ app.patch('/api/users/:id', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(5000, '0.0.0.0', () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
   console.log(`📝 Registration endpoint: http://localhost:${PORT}/api/register`);
   console.log(`👥 Users endpoint: http://localhost:${PORT}/api/users`);

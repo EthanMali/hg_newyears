@@ -146,15 +146,15 @@ const RegistrationForm = () => {
 
   return (
     <div className="registration-container">
+      <button 
+        className="language-switcher"
+        onClick={toggleLanguage}
+        aria-label="Switch language"
+      >
+        {language === 'en' ? 'RU' : 'EN'}
+      </button>
+      
       <div className="registration-card">
-        <button 
-          className="language-switcher"
-          onClick={toggleLanguage}
-          aria-label="Switch language"
-        >
-          {language === 'en' ? 'RU' : 'EN'}
-        </button>
-        
         <h1 className="registration-title">{t.title}</h1>
         <p className="registration-subtitle">{t.subtitle}</p>
 
