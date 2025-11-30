@@ -1,0 +1,337 @@
+/* Mobile-First Clean Overview Styles */
+.overview-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: #fbfbfd;
+  color: #222;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Full width sections */
+.overview-container > * {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.overview-header {
+  width: 100%;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.overview-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  color: #111827;
+}
+
+.overview-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Stats Grid - Mobile First */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  width: 100%;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(16,24,40,0.04);
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Search and Table - Mobile First */
+.search-container {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  position: static;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #e9edf2;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background: #fff;
+  -webkit-appearance: none;
+  appearance: none;
+  font-size: 16px; /* Prevents zoom on iOS */
+}
+
+.table-container {
+  flex: 1;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+}
+
+.guests-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 540px; /* allow smaller width before scrolling */
+  font-size: 0.95rem;
+}
+
+.guests-table th,
+.guests-table td {
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+
+.guests-table th {
+  background: transparent;
+  font-weight: 600;
+  color: #55606a;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.guests-table tr:last-child td {
+  border-bottom: none;
+}
+
+.guests-table tr:hover {
+  background: #f8f9fa;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-confirmed {
+  background: #e3f9e5;
+  color: #1a7f37;
+}
+
+.status-pending {
+  background: #fff8c5;
+  color: #9a6700;
+}
+
+.status-declined {
+  background: #ffebe9;
+  color: #cf222e;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border-top: 1px solid transparent;
+  position: static;
+}
+
+.btn {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-size: 0.98rem;
+  transition: all 0.18s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 48px; /* Minimum touch target size */
+}
+
+.btn-print {
+  background: #2c3e50;
+  color: white;
+}
+
+.btn-print:hover {
+  background: #1a252f;
+}
+
+.btn-print {
+  background: #111827;
+  color: white;
+}
+
+.btn-print:hover {
+  background: #0b1216;
+}
+.btn-back {
+  background: transparent;
+  border: 1px solid #e6e9ee;
+  color: #111827;
+}
+
+.btn-back:hover {
+  background: #f4f6f9;
+}
+/* Tablet and Desktop Styles */
+@media (min-width: 768px) {
+  .overview-container {
+    padding: 0;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  
+  .guests-table th,
+  .guests-table td {
+    padding: 1rem;
+  }
+  
+  .action-buttons {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  
+  .btn {
+    width: auto;
+    min-width: 160px;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1200px) {
+  .overview-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 480px) {
+  .stat-card {
+    padding: 0.75rem;
+    border-radius: 8px;
+    box-shadow: none;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .stat-label {
+    font-size: 0.75rem;
+  }
+  
+  .overview-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .overview-subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* Prevent text zoom on mobile */
+@media screen and (max-device-width: 480px) {
+  body {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+}
+
+
+/* Mobile: remove sticky + shadows for clean flat layout */
+@media (max-width: 480px) {
+  .overview-header,
+  .search-container,
+  .action-buttons {
+    position: static;       /* No sticky */
+    box-shadow: none;       /* Remove drop shadow */
+    border: none;           /* Remove borders if desired */
+  }
+
+  /* Optional: remove table header stickiness on mobile */
+  .guests-table th {
+    position: static;
+    box-shadow: none;
+  }
+
+  /* Stack stat grid to single column for narrow screens */
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    padding: 0.6rem;
+  }
+
+  /* Make action buttons full width and stacked */
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  /* Allow the table to be more compact before scrolling */
+  .guests-table {
+    min-width: 0;
+    font-size: 0.95rem;
+  }
+}
+

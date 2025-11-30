@@ -11,6 +11,14 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const log = (scope, details = {}, level = 'info') => {
+  const timestamp = new Date().toISOString();
+  const payload = typeof details === 'string' ? { message: details } : details;
+  console[level === 'error' ? 'error' : 'log'](
+    JSON.stringify({ timestamp, level, scope, ...payload })
+  );
+};
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -37,6 +45,12 @@ const readUsers = () => {
     return JSON.parse(data);
   } catch (error) {
     console.error('Error reading users file:', error);
+    try {
+      fs.writeFileSync(DATA_FILE, JSON.stringify([], null, 2));
+      console.log('users.json was corrupted and has been reset to an empty array.');
+    } catch (resetError) {
+      console.error('Failed to reset users file:', resetError);
+    }
     return [];
   }
 };
@@ -67,10 +81,38 @@ app.get('/api/health', (req, res) => {
 // POST /api/register - Create a new registration (New Year's Party)
 app.post('/api/register', (req, res) => {
   try {
-    const { coupleName, phone, numberOfKids } = req.body;
+    const {
+      coupleName,
+      phone,
+      numberOfKids,
+      husbandName,
+      wifeName,
+      lastName,
+      amount
+    } = req.body;
 
-    // Validation
-    if (!coupleName || !phone) {
+    const normalizedPhone = typeof phone === 'string' ? phone.trim() : '';
+    const normalizedHusband = typeof husbandName === 'string' ? husbandName.trim() : '';
+    const normalizedWife = typeof wifeName === 'string' ? wifeName.trim() : '';
+    const normalizedLast = typeof lastName === 'string' ? lastName.trim() : '';
+
+    let normalizedCoupleName = typeof coupleName === 'string' ? coupleName.trim() : '';
+    if (!normalizedCoupleName && (normalizedHusband || normalizedWife)) {
+      const baseNames = [normalizedHusband, normalizedWife].filter(Boolean).join(' & ');
+      normalizedCoupleName = normalizedLast ? `${baseNames} ${normalizedLast}` : baseNames;
+    }
+
+    log('register:incoming', {
+      coupleName: normalizedCoupleName,
+      phone: normalizedPhone,
+      numberOfKids,
+      husbandName: normalizedHusband,
+      wifeName: normalizedWife,
+      lastName: normalizedLast,
+      amount
+    });
+
+    if (!normalizedCoupleName || !normalizedPhone) {
       return res.status(400).json({
         success: false,
         message: 'Couple name and phone are required'
@@ -86,21 +128,33 @@ app.post('/api/register', (req, res) => {
       });
     }
 
+    const parsedAmount = typeof amount === 'number' ? amount : parseFloat(amount);
+    const defaultAmount = 150 + (kidsCount * 25);
+    const normalizedAmount = Number.isFinite(parsedAmount) && parsedAmount >= 0
+      ? parsedAmount
+      : defaultAmount;
+
     const users = readUsers();
 
     // Create new registration
     const newRegistration = {
       id: generateId(),
-      coupleName,
-      phone,
+      coupleName: normalizedCoupleName,
+      phone: normalizedPhone,
       numberOfKids: kidsCount,
+      amount: normalizedAmount,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
 
+    if (normalizedHusband) newRegistration.husbandName = normalizedHusband;
+    if (normalizedWife) newRegistration.wifeName = normalizedWife;
+    if (normalizedLast) newRegistration.lastName = normalizedLast;
+
     users.push(newRegistration);
 
     if (writeUsers(users)) {
+      log('register:success', { id: newRegistration.id, coupleName: newRegistration.coupleName });
       res.status(201).json({
         success: true,
         message: 'Registration successful! See you at the party!',
@@ -113,13 +167,14 @@ app.post('/api/register', (req, res) => {
         }
       });
     } else {
+      log('register:write_error', { error: 'Failed to save registration' }, 'error');
       res.status(500).json({
         success: false,
         message: 'Failed to save registration'
       });
     }
   } catch (error) {
-    console.error('Registration error:', error);
+    log('register:exception', { error: error?.message, stack: error?.stack }, 'error');
     res.status(500).json({
       success: false,
       message: 'Internal server error'
@@ -322,7 +377,7 @@ app.patch('/api/users/:id', (req, res) => {
 });
 
 // Start server
-app.listen(5000, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
   console.log(`📝 Registration endpoint: http://localhost:${PORT}/api/register`);
   console.log(`👥 Users endpoint: http://localhost:${PORT}/api/users`);
