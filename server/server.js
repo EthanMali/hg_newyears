@@ -91,7 +91,8 @@ app.post('/api/register', (req, res) => {
       amount
     } = req.body;
 
-    const normalizedPhone = typeof phone === 'string' ? phone.trim() : '';
+    const normalizedPhoneRaw = typeof phone === 'string' ? phone.trim() : '';
+    const normalizedPhone = normalizedPhoneRaw || 'N/A';
     const normalizedHusband = typeof husbandName === 'string' ? husbandName.trim() : '';
     const normalizedWife = typeof wifeName === 'string' ? wifeName.trim() : '';
     const normalizedLast = typeof lastName === 'string' ? lastName.trim() : '';
@@ -112,10 +113,10 @@ app.post('/api/register', (req, res) => {
       amount
     });
 
-    if (!normalizedCoupleName || !normalizedPhone) {
+    if (!normalizedCoupleName) {
       return res.status(400).json({
         success: false,
-        message: 'Couple name and phone are required'
+        message: 'Couple name is required'
       });
     }
 
@@ -129,7 +130,7 @@ app.post('/api/register', (req, res) => {
     }
 
     const parsedAmount = typeof amount === 'number' ? amount : parseFloat(amount);
-    const defaultAmount = 150 + (kidsCount * 25);
+    const defaultAmount = 100
     const normalizedAmount = Number.isFinite(parsedAmount) && parsedAmount >= 0
       ? parsedAmount
       : defaultAmount;

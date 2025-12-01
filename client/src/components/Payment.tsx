@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import './Payment.css'
 import { translations, type Language } from '../translations'
+import { getApiUrl } from '../utils/api'
 import { savePreferredLanguage, loadPreferredLanguage } from '../utils/languagePreference'
 
 interface PaymentDetails {
@@ -94,7 +95,7 @@ const Payment = () => {
       // Simulate successful payment
       // After successful payment, register the user on the server
       try {
-        const resp = await axios.post('/api/register', {
+        const resp = await axios.post(getApiUrl('/api/register'), {
           coupleName: paymentDetails.coupleName,
           phone: paymentDetails.phone || '',
           numberOfKids: paymentDetails.numberOfKids,
