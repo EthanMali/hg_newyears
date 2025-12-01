@@ -22,11 +22,48 @@ interface OverviewData {
   lastUpdated: string
 }
 
+const recalcStats = (registrations: Registration[]) => {
+  const count = registrations.length
+  const totalAdults = count * 2
+  const totalKids = registrations.reduce((sum, reg) => sum + (reg.numberOfKids || 0), 0)
+  return { count, totalAdults, totalKids }
+}
+
 const EventOverview = () => {
   const [data, setData] = useState<OverviewData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  const handleDelete = async (id: string) => {
+    if (!id) return
+    if (!window.confirm('Delete this registration?')) return
+
+    try {
+      setDeletingId(id)
+      await axios.delete(getApiUrl(`/api/users/${id}`))
+
+      setData(prev => {
+        if (!prev) return prev
+        const updatedRegs = prev.registrations.filter(reg => reg.id !== id)
+        const { count, totalAdults, totalKids } = recalcStats(updatedRegs)
+        return {
+          ...prev,
+          registrations: updatedRegs,
+          count,
+          totalAdults,
+          totalKids,
+          lastUpdated: new Date().toISOString()
+        }
+      })
+    } catch (deleteError) {
+      alert('Failed to delete registration. Please try again.')
+      console.error('Delete error:', deleteError)
+    } finally {
+      setDeletingId(null)
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -143,6 +180,7 @@ const EventOverview = () => {
               <th>Kids</th>
               <th>Status</th>
               <th>Registered</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -185,6 +223,15 @@ const EventOverview = () => {
                       month: 'short',
                       day: 'numeric',
                     })}
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleDelete(guest.id)}
+                      disabled={deletingId === guest.id}
+                    >
+                      {deletingId === guest.id ? 'Deleting...' : 'Delete'}
+                    </button>
                   </td>
                 </tr>
               ))

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import './Payment.css'
-import { translations, type Language } from '../translations'
+import type { Language } from '../translations'
 import { getApiUrl } from '../utils/api'
 import { savePreferredLanguage, loadPreferredLanguage } from '../utils/languagePreference'
 
@@ -14,10 +14,11 @@ interface PaymentDetails {
   cashAppLink?: string
 }
 
+
+
 const Payment = () => {
   const navigate = useNavigate()
   const [language, setLanguage] = useState<Language>('en')
-  const t = translations[language]
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [hasOpenedCashApp, setHasOpenedCashApp] = useState(false)
@@ -69,6 +70,8 @@ const Payment = () => {
     setHasOpenedCashApp(true)
     setCashAppClickedAt(Date.now())
   }
+
+  
 
   const handlePayment = async () => {
     if (!paymentDetails) return
@@ -189,7 +192,6 @@ const Payment = () => {
             >
               {language === 'en' ? 'Pay with Cash App' : 'Оплатить через Cash App'}
             </a>
-            
           </div>
         </div>
         <div className="payment-footer-divider" aria-hidden="true" />

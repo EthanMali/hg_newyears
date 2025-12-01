@@ -44,7 +44,7 @@ export const translations: Record<Language, Translations> = {
     lastNamePlaceholder: 'e.g., Smith',
     phone: 'Phone Number',
     phonePlaceholder: '(XXX) XXX-XXXX',
-    numberOfKids: 'Number of children',
+    numberOfKids: 'Number of children coming with you',
     numberOfKidsTooltip: 'How many children will be coming with you',
     registerButton: 'Register',
     registering: 'Registering...',
