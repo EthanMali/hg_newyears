@@ -19,4 +19,7 @@ client/build/
 .DS_Store
 Thumbs.db
 
+# Data files (persist locally, don't overwrite on deploy)
+server/data/users.json
+
 
